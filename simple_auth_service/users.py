@@ -43,7 +43,7 @@ class User(object):
     def verify_otp(self, otp):
         # OTP is device id plus day of the month... secure
         dt = datetime.datetime.today()
-        return self.mfa_device and (self.mfa_device + dt.month == otp)
+        return self.mfa_device and (self.mfa_device + dt.day == otp)
 
 
 user_db = {}

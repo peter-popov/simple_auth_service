@@ -1,0 +1,76 @@
+---
+test_name: Register user, verify email and login
+
+stages:
+  - name: User login
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - user@test.com
+        - qwerty
+    response:
+      status_code: 403
+      body:
+        message: !anystr
+        mfa_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          mfa_token: mfa_token
+
+  - name: Request set MFA device
+    request:
+      url: http://localhost:5000/user/setmfadevice
+      method: GET
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+      save:
+        body:
+          set_mfa_device_url: link_in_email
+  
+  - name: Set MFA device
+    request:
+      url: "{set_mfa_device_url}"
+      method: POST
+      json:
+        mfa_device: 10000
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+
+  - name: Login again
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - user@test.com
+        - qwerty
+    response:
+      status_code: 403
+      body:
+        message: !anystr
+        mfa_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          mfa_token: mfa_token
+      
+  - name: Provide one-time-password
+    request:
+      url: http://localhost:5000/auth/mfa
+      method: POST
+      json:
+        mfa_token: "{mfa_token:s}"
+        otp: 10002
+    response:
+      status_code: 200
+      body:
+        access_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          access_token: access_token

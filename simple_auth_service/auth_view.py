@@ -56,7 +56,6 @@ def mfa():
     mfa_token = request.json.get("mfa_token")
     otp = request.json.get("otp")
     user = verify_token(mfa_token, "mfa")
-
     if not user.verify_otp(otp):
         abort(403, "Invalid password")
 

@@ -1,5 +1,5 @@
 ---
-test_name: Register user, verify email and login
+test_name: New user logs in without MFA tocken
 
 stages:
   - name: User login
@@ -7,7 +7,7 @@ stages:
       url: http://localhost:5000/auth/login
       method: GET
       auth:
-        - mfa_user@test.com
+        - user@test.com
         - qwerty
     response:
       status_code: 200
@@ -18,29 +18,22 @@ stages:
         body:
           access_token: access_token
 
-  - name: Request set MFA device
+  - name: No-mfa user can access the profile
     request:
-      url: http://localhost:5000/user/setmfadevice
+      url: http://localhost:5000/user/profile
       method: GET
       headers:
         Authorization: "Bearer {access_token:s}"
     response:
       status_code: 200
-      save:
-        body:
-          set_mfa_device_url: link_in_email
-  
-  - name: Set MFA device
+      body:
+        email: user@test.com
+
+  - name: No-mfa user cannot access vehciles
     request:
-      url: "{set_mfa_device_url}"
-      method: POST
-      json:
-        mfa_device: "12345"
+      url: http://localhost:5000/vehicle/drive
+      method: GET
       headers:
         Authorization: "Bearer {access_token:s}"
     response:
-      status_code: 200
-      save:
-        body:
-          set_mfa_device_url: link_in_email
-  
+      status_code: 401

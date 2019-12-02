@@ -1,0 +1,55 @@
+---
+test_name: Register user, verify email and login
+
+stages:
+  - name: User login
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - user@test.com
+        - qwerty
+    response:
+      status_code: 403
+      body:
+        message: !anystr
+        mfa_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          mfa_token: mfa_token
+
+  - name: Provide wrong one-time-password
+    request:
+      url: http://localhost:5000/auth/mfa
+      method: POST
+      json:
+        mfa_token: "{mfa_token:s}"
+        otp: 42
+    response:
+      status_code: 403
+      
+  - name: Provide one-time-password
+    request:
+      url: http://localhost:5000/auth/mfa
+      method: POST
+      json:
+        mfa_token: "{mfa_token:s}"
+        otp: 12347
+    response:
+      status_code: 200
+      body:
+        access_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          access_token: access_token
+  
+  - name: Mfa user can access vehciles
+    request:
+      url: http://localhost:5000/vehicle/drive
+      method: GET
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200

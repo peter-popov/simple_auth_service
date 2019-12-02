@@ -26,4 +26,15 @@ def verify_token(token):
 @bp.route("/drive", methods=["GET"])
 @auth.login_required
 def drive():
+    """Example of some business specific API protected by Auth
+    This API will only be availible to the users who logged in with their MFA device
+    ---
+    tags:
+      - vehicle
+    responses:
+      200:
+        description: vroom vroom vroom
+      401:
+        description: Authentication failed
+    """
     return "vroom vroom vroom"

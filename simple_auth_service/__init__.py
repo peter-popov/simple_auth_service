@@ -10,7 +10,10 @@ app.register_blueprint(user_view.bp)
 app.register_blueprint(vehicles_view.bp)
 
 
-swagger_template = {"securityDefinitions": {"basicAuth": {"type": "basic"}}}
+swagger_template = {
+    "info": {"title": "Simple Auth Service"},
+    "securityDefinitions": {"basicAuth": {"type": "basic"}},
+}
 
 swagger = Swagger(app, template=swagger_template)
 

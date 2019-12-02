@@ -30,12 +30,32 @@ def verify_token(token):
 @bp.route("/profile", methods=["GET"])
 @auth.login_required
 def profile():
+    """Get current user data
+    ---
+    tags:
+      - user
+    responses:
+      200:
+        description: All good, json with user's data
+      401, 403:
+        description: Authentication failed
+    """
     return jsonify(g.current_user.__dict__)
 
 
 @bp.route("/setmfadevice", methods=["GET"])
 @auth.login_required
 def init_set_mfa_device():
+    """Initialize proccess of setting MFA device
+    ---
+    tags:
+      - user
+    responses:
+      200:
+        description: All good, check your email
+      401, 403:
+        description: Authentication failed
+    """
     user = g.current_user
     token = user.generate_token(60, "set_mfa_device")
     return jsonify(
@@ -46,6 +66,26 @@ def init_set_mfa_device():
 @bp.route("/setmfadevice/<token>", methods=["POST"])
 @auth.login_required
 def set_mfa_device(token):
+    """Setup new MFA device
+    We fake MFA device. Here caller can only provide the device ID. We assume it's already 
+    set and registered. In relaity we will need to provde device setup to the user and then 
+    verify a newly set device. 
+    ---
+    tags:
+      - user
+    parameters:
+      - name: mfa_device
+        in: body
+        description: New MFA device ID
+      - name: token
+        in: path
+        description: One time token send by email
+    responses:
+      200:
+        description: All good, ready to loging
+      401, 403:
+        description: Authentication failed
+    """
     verify_action(token, "set_mfa_device")
     g.current_user.mfa_device = request.json.get("mfa_device")
     return "Success"

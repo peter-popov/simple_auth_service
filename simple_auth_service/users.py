@@ -4,8 +4,6 @@ from itsdangerous import (
     BadSignature,
     SignatureExpired,
 )
-import datetime
-
 
 SECRET_KEY = "Move Me To Proper Secret Manager"
 
@@ -17,7 +15,7 @@ class User(object):
         self.password_hash = generate_password_hash(password)
         self.email = email
         self.email_verified = False
-        # Very simple permission managment
+        # Very simple permission management
         self.permissions = ["vehicles"]
         self.mfa_device = None
 
@@ -41,9 +39,8 @@ class User(object):
         return check_password_hash(self.password_hash, password)
 
     def verify_otp(self, otp):
-        # OTP is device id plus day of the month... secure
-        dt = datetime.datetime.today()
-        return self.mfa_device and (self.mfa_device + dt.day == otp)
+        # OTP is device id plus 17
+        return self.mfa_device and (self.mfa_device + 17 == otp)
 
 
 user_db = {}

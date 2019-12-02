@@ -65,7 +65,7 @@ stages:
       method: POST
       json:
         mfa_token: "{mfa_token:s}"
-        otp: 10002
+        otp: 10017
     response:
       status_code: 200
       body:

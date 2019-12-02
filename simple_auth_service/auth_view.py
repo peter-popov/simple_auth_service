@@ -9,9 +9,9 @@ auth = HTTPBasicAuth()
 def verify_token(token, expected_action):
     data = users.verify_auth_token(token)
     if not data:
-        abort(403, "Invalid verification tocken")
+        abort(403, "Invalid verification token")
     if not "action" in data or data["action"] != expected_action:
-        abort(403, "Invalid verification tocken")
+        abort(403, "Invalid verification token")
     user = users.get_user(data["id"])
     if not user:
         abort(400)
@@ -30,7 +30,7 @@ def verify_password(username, password):
 @auth.login_required
 def login():
     """User login endpoint
-    For users with MFA, returns 403 and a token for making OTP valdiation
+    For users with MFA, returns 403 and a token for making OTP validation
     For users without MFA, returns access_token with limited permissions(only set MFA)
     ---
     tags:
@@ -39,7 +39,7 @@ def login():
       200:
         description: All good, returns access_token
       403:
-        description: User, password, or tocken are invalid. Or MFA is required
+        description: User, password, or token are invalid. Or MFA is required
     """
     user = users.get_user(auth.username())
 
@@ -80,7 +80,7 @@ def mfa():
       200:
         description: All good, returns access_token
       403:
-        description: User, password, or tocken are invalid. Or MFA is required
+        description: User, password, or token are invalid. Or MFA is required
     """
     mfa_token = request.json.get("mfa_token")
     otp = request.json.get("otp")
@@ -118,14 +118,14 @@ def signup():
 
     user = users.add_user(username, password, email)
     if user is None:
-        abort(403, description="User alreay exists")
+        abort(403, description="User already exists")
 
     email_verify_token = user.generate_token(60, "email")
     email_verify_url = url_for(
         "auth.verify_email", token=email_verify_token, _external=True
     )
 
-    # Imagive we send it by email:
+    # Imagine we send it by email:
     return jsonify({"username": user.username, "link_in_email": email_verify_url}), 201
 
 
@@ -152,7 +152,7 @@ def verify_email(token):
 @bp.route("/resetpassword", methods=["GET"])
 def init_reset_password():
     """Initialize password reset
-    This API always returns a token... but in case of unknows user the token will be invalid
+    This API always returns a token... but in case of unknown user the token will be invalid
     ---
     tags:
       - auth
@@ -162,15 +162,15 @@ def init_reset_password():
     """
     email = request.json.get("email")
     user = users.get_user(email)
-    # As with real email, this method will always succseeds to not reveal whether user exists
-    # In case if user does not exists we will generate an invalid token
+    # As with a real email, this method will always succeed in order to not reveal whether a user exists
+    # In case if a user does not exists we will generate an invalid token
     token = None
     if user:
         token = user.generate_token(60, "set_password")
     else:
         token = users.User("", "", "").generate_token(60, "invalid")
 
-    # Imagive we send it by email:
+    # Imagine we send it by email:
     return jsonify(
         {"link_in_email": url_for("auth.reset_password", token=token, _external=True)}
     )

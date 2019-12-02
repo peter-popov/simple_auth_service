@@ -35,7 +35,7 @@ stages:
       method: POST
       json:
         mfa_token: "{mfa_token:s}"
-        otp: 12347
+        otp: 12362
     response:
       status_code: 200
       body:
@@ -45,7 +45,7 @@ stages:
         body:
           access_token: access_token
   
-  - name: Mfa user can access vehciles
+  - name: Mfa user can access vehicles
     request:
       url: http://localhost:5000/vehicle/drive
       method: GET

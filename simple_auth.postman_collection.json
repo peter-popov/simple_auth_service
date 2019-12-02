@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "646a2cad-7f87-41c2-9e3d-da0cbeca36b1",
+		"name": "simple_auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"Elon Mask\",\n\t\"email\" : \"elon@tesla.com\",\n\t\"password\" : \"mars2030\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "0.0.0.0:5000/auth/signup",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:5000/auth/verify_email/eyJhbGciOiJIUzUxMiIsImlhdCI6MTU3NTIzNTY3MCwiZXhwIjoxNTc1MjM1NzMwfQ.eyJpZCI6ImVsb25AdGVzbGEuY29tIiwiYWN0aW9uIjoiZW1haWwifQ.MaHmx7g6XFC52FGo6898TkCHBaVeEO1VGxf1BhtSUmzmnyfDLDz5YN5nCCRA_ud0Z-RU2hTTx1fsZK_-o_UgHA",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"verify_email",
+						"eyJhbGciOiJIUzUxMiIsImlhdCI6MTU3NTIzNTY3MCwiZXhwIjoxNTc1MjM1NzMwfQ.eyJpZCI6ImVsb25AdGVzbGEuY29tIiwiYWN0aW9uIjoiZW1haWwifQ.MaHmx7g6XFC52FGo6898TkCHBaVeEO1VGxf1BhtSUmzmnyfDLDz5YN5nCCRA_ud0Z-RU2hTTx1fsZK_-o_UgHA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "mfa_user@test.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "0.0.0.0:5000/auth/login",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsImlhdCI6MTU3NTIzNTcyMSwiZXhwIjoxNTc1MjM1NzgxfQ.eyJpZCI6ImVsb25AdGVzbGEuY29tIiwiYWN0aW9uIjoiYWNjZXNzIiwicGVybWlzc2lvbnMiOltdfQ.4D_xItjAWEVjKcEhltg72otsScr3-RtTs73AIZWWG6Yn1DbEzfERqUGIxrAjOb2btTzoSdh2jq5nfyV7Y47lqg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/user/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MFA otp",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"mfa_token\": \"{mfa_token}\",\n        \"otp\": \"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "0.0.0.0:5000/auth/mfa",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"mfa"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

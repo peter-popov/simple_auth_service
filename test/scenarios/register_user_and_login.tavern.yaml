@@ -1,0 +1,44 @@
+---
+test_name: Register user, verify email and login
+
+stages:
+  - name: Register a new user
+    request:
+      url: http://localhost:5000/auth/signup
+      method: POST
+      json:
+        email: user@test.com
+        username: The User
+        password: qwerty
+    response:
+      status_code: 201
+      save:
+        body:
+          verify_email_url: link_in_email
+
+  - name: Try to login without verifying the email
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - user@test.com
+        - qwerty
+    response:
+      status_code: 403
+
+  - name: Verify email
+    request:
+      url: "{verify_email_url:s}"
+      method: GET
+    response:
+      status_code: 200
+
+  - name: Try to login after email is verified
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - user@test.com
+        - qwerty
+    response:
+      status_code: 200

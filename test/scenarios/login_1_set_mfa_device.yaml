@@ -1,0 +1,46 @@
+---
+test_name: Register user, verify email and login
+
+stages:
+  - name: User login
+    request:
+      url: http://localhost:5000/auth/login
+      method: GET
+      auth:
+        - mfa_user@test.com
+        - qwerty
+    response:
+      status_code: 200
+      body:
+        access_token: !anystr
+        expires_in: !anyint
+      save:
+        body:
+          access_token: access_token
+
+  - name: Request set MFA device
+    request:
+      url: http://localhost:5000/user/setmfadevice
+      method: GET
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+      save:
+        body:
+          set_mfa_device_url: link_in_email
+  
+  - name: Set MFA device
+    request:
+      url: "{set_mfa_device_url}"
+      method: POST
+      json:
+        mfa_device: "12345"
+      headers:
+        Authorization: "Bearer {access_token:s}"
+    response:
+      status_code: 200
+      save:
+        body:
+          set_mfa_device_url: link_in_email
+  

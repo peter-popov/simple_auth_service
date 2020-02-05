@@ -146,6 +146,7 @@ def verify_email(token):
     """
     user = verify_token(token, "email")
     user.email_verified = True
+    users.update_user(user)
     return "Email Verified"
 
 
@@ -196,4 +197,5 @@ def reset_password(token):
     new_password = request.json.get("new_password")
     user = verify_token(token, "set_password")
     user.set_password(new_password)
+    users.update_user(user)
     return "Success"

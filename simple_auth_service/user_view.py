@@ -88,4 +88,5 @@ def set_mfa_device(token):
     """
     verify_action(token, "set_mfa_device")
     g.current_user.mfa_device = request.json.get("mfa_device")
+    users.update_user(g.current_user)
     return "Success"

@@ -2,3 +2,6 @@ flask
 flask_httpauth
 flasgger
 tavern
+gunicorn
+pymongo
+jsonpickle

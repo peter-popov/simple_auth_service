@@ -7,7 +7,7 @@ Run container
 ---------------------
 Make sure that docker is installed. Build docker image and start service on port 5000:
     
-    ➜ make run
+    ➜ docker-compose up
 
 Open [localhost:5000/apidocs](http://localhost:5000/apidocs) to see the Swagger documentation. Use provided postman collection for some manual tests.
 

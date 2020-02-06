@@ -59,6 +59,7 @@ def from_dict(d):
 class UserMongoDB(object):
     def __init__(self):
         self.client = MongoClient(os.environ["MONGODB_HOSTNAME"],
+                                   authSource=os.environ["MONGODB_DATABASE"], 
                                    username=os.environ["MONGODB_USERNAME"], 
                                    password=os.environ["MONGODB_PASSWORD"])
         self.db = self.client[os.environ["MONGODB_DATABASE"]]

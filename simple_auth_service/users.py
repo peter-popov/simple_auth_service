@@ -11,6 +11,7 @@ from pymongo import MongoClient
 
 SECRET_KEY = "Move Me To Proper Secret Manager"
 
+
 class User(object):
     def __init__(self, username, password, email):
         self.userID = email  # uuid1()
@@ -52,19 +53,23 @@ class User(object):
 def to_dict(obj):
     return json.loads(jsonpickle.encode(obj))
 
+
 def from_dict(d):
     del d["_id"]
-    return jsonpickle.decode(json.dumps(d, default=lambda o: '<not serializable>'))
+    return jsonpickle.decode(json.dumps(d, default=lambda o: "<not serializable>"))
+
 
 class UserMongoDB(object):
     def __init__(self):
-        self.client = MongoClient(os.environ["MONGODB_HOSTNAME"],
-                                   authSource=os.environ["MONGODB_DATABASE"], 
-                                   username=os.environ["MONGODB_USERNAME"], 
-                                   password=os.environ["MONGODB_PASSWORD"])
+        self.client = MongoClient(
+            os.environ["MONGODB_HOSTNAME"],
+            authSource=os.environ["MONGODB_DATABASE"],
+            username=os.environ["MONGODB_USERNAME"],
+            password=os.environ["MONGODB_PASSWORD"],
+        )
         self.db = self.client[os.environ["MONGODB_DATABASE"]]
-        self.users = self.db['users']
-        
+        self.users = self.db["users"]
+
     def add_user(self, username, password, email):
         user = get_user(email)
         if user:
@@ -80,7 +85,8 @@ class UserMongoDB(object):
         return from_dict(doc)
 
     def update_user(self, user):
-        self.users.update_one({"email": user.userID}, {"$set":to_dict(user)})
+        self.users.update_one({"email": user.userID}, {"$set": to_dict(user)})
+
 
 user_db = UserMongoDB()
 
@@ -91,6 +97,7 @@ def add_user(username, password, email):
 
 def get_user(id):
     return user_db.get_user(id)
+
 
 def update_user(user):
     return user_db.update_user(user)

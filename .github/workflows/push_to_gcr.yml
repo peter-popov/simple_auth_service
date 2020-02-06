@@ -14,7 +14,7 @@ jobs:
       with:
         gcr_host: gcr.io
         image_name: simple-auth
-        image_tag: 0.0.2
+        image_tag: 0.0.4
       env:
         GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
         GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}

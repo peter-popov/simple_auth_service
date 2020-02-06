@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Docker build and push to GCR
-      uses: raccoondev/push-docker-gcr
+      uses: raccoondev/push-docker-gcr@v1
       with:
         gcr_host: gcr.io
         image_name: simple-auth

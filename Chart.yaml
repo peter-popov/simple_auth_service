@@ -3,4 +3,8 @@ name: simple-auth-service
 description: A Helm chart for Kubernetes
 type: application
 version: 0.1.0
-appVersion: 1.0.0
+appVersion: 0.0.3   
+dependencies:
+    - name: mongodb
+      version: 7.8.2
+      repository: https://kubernetes-charts.storage.googleapis.com/

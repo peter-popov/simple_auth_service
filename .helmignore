@@ -20,3 +20,6 @@
 .idea/
 *.tmproj
 .vscode/
+key.txt
+secrets.yaml
+testenv

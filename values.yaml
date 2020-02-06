@@ -40,3 +40,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+mongodb:
+  enabled: true
+  mongodbDatabase: users
+  mongodbUsername: auth-service
+  existingSecret: mongo-secret

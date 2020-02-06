@@ -31,16 +31,24 @@ spec:
             - name: http
               containerPort: 5000
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: MONGODB_HOSTNAME
+            value: {{ .Release.Name }}-mongodb  
+          - name: MONGODB_DATABASE
+            value: {{ .Values.mongodb.mongodbDatabase }}
+          - name: MONGODB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: mongodb-username
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: mongodb-password
+              
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -52,4 +60,4 @@ spec:
     {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+    {{- end }}            

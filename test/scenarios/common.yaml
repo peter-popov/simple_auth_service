@@ -1,0 +1,4 @@
+name: Tavern test config
+description: hostnames and auth keys for tested services
+variables:
+    testhost: "http://35.198.155.124"

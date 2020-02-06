@@ -1,10 +1,13 @@
 ---
 test_name: Register user, verify email and login
 
+includes:
+  - !include common.yaml
+
 stages:
   - name: User login
     request:
-      url: http://localhost:5000/auth/login
+      url: "{testhost:s}/auth/login"
       method: GET
       auth:
         - user@test.com
@@ -21,7 +24,7 @@ stages:
 
   - name: Provide wrong one-time-password
     request:
-      url: http://localhost:5000/auth/mfa
+      url: "{testhost:s}/auth/mfa"
       method: POST
       json:
         mfa_token: "{mfa_token:s}"
@@ -31,7 +34,7 @@ stages:
       
   - name: Provide one-time-password
     request:
-      url: http://localhost:5000/auth/mfa
+      url: "{testhost:s}/auth/mfa"
       method: POST
       json:
         mfa_token: "{mfa_token:s}"
@@ -47,7 +50,7 @@ stages:
   
   - name: Mfa user can access vehicles
     request:
-      url: http://localhost:5000/vehicle/drive
+      url: "{testhost:s}/vehicle/drive"
       method: GET
       headers:
         Authorization: "Bearer {access_token:s}"

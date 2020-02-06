@@ -1,10 +1,13 @@
 ---
 test_name: Register user, verify email and login
 
+includes:
+  - !include common.yaml
+
 stages:
   - name: Register a new user
     request:
-      url: http://localhost:5000/auth/signup
+      url: "{testhost:s}/auth/signup"
       method: POST
       json:
         email: user@test.com
@@ -18,7 +21,7 @@ stages:
 
   - name: Try to login without verifying the email
     request:
-      url: http://localhost:5000/auth/login
+      url: "{testhost:s}/auth/login"
       method: GET
       auth:
         - user@test.com
@@ -35,7 +38,7 @@ stages:
 
   - name: Try to login after email is verified
     request:
-      url: http://localhost:5000/auth/login
+      url: "{testhost:s}/auth/login"
       method: GET
       auth:
         - user@test.com

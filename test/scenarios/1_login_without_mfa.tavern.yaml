@@ -1,10 +1,13 @@
 ---
 test_name: New user logs in without MFA tocken
 
+includes:
+  - !include common.yaml
+
 stages:
   - name: User login
     request:
-      url: http://localhost:5000/auth/login
+      url: "{testhost:s}/auth/login"
       method: GET
       auth:
         - user@test.com
@@ -20,7 +23,7 @@ stages:
 
   - name: No-mfa user can access the profile
     request:
-      url: http://localhost:5000/user/profile
+      url: "{testhost:s}/user/profile"
       method: GET
       headers:
         Authorization: "Bearer {access_token:s}"
@@ -29,9 +32,9 @@ stages:
       body:
         email: user@test.com
 
-  - name: No-mfa user cannot access vehciles
+  - name: No-mfa user cannot access vehicles
     request:
-      url: http://localhost:5000/vehicle/drive
+      url: "{testhost:s}/vehicle/drive"
       method: GET
       headers:
         Authorization: "Bearer {access_token:s}"
